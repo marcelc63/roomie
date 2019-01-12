@@ -1,0 +1,542 @@
+<html>
+  <head>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  </head>
+
+  <body>
+    <div id="app" class="d-flex flex-column align-items-center">
+      <div class="role">
+        <h5>
+          <span class="badge badge-primary">Customer Dashboard</span>
+          <span class="badge badge-light"
+            ><a href="/worker.html">Worker Dashboard</a></span
+          >
+          <span class="badge badge-light"
+            ><a href="/admin.html">Admin Dashboard</a></span
+          >
+        </h5>
+      </div>
+      <div class="main d-flex flex-column">
+        <div>
+          <div class="welcome d-flex flex-row justify-content-between">
+            <span>Welcome <b>Gideon</b>, let's get you settled in :)</span>
+            <span>Room {{ room }}</span>
+          </div>
+
+          <div class="alert alert-success" role="alert" v-if="success">
+            Someone is on their way now to delivered your item
+          </div>
+
+          <div class="mb-20">
+            <div class="category d-flex flex-row justify-content-between">
+              <div class="col-6">
+                <span class="category--title">Bedroom</span>
+              </div>
+              <div class="col-6 d-flex flex-row justify-content-between">
+                <span class="col-6 text-center category__label--300"
+                  >Extras</span
+                >
+                <span class="col-6 text-center category__label--300"
+                  >Change?</span
+                >
+              </div>
+            </div>
+            <div>
+              <div
+                class="amenity d-flex flex-row justify-content-between align-items-center"
+              >
+                <div class="col-6">
+                  <span class="amenity--item">Sheets</span>
+                </div>
+                <div class="col-6 d-flex flex-row">
+                  <div
+                    class="btn-group col-6"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="fnExtras('bedroom', 'sheets', 'decrease')"
+                    >
+                      -
+                    </button>
+                    <button type="button" class="btn btn-light">
+                      {{ extras.bedroom.sheets }}
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="fnExtras('bedroom', 'sheets', 'increase')"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div
+                    class="btn-group col-6"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      :class="checkChange('bedroom','sheets', 'yes')"
+                      @click="fnChange('bedroom','sheets', 'yes')"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      type="button"
+                      :class="checkChange('bedroom','sheets', 'no')"
+                      @click="fnChange('bedroom','sheets', 'no')"
+                    >
+                      No
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="amenity d-flex flex-row justify-content-between align-items-center"
+              >
+                <div class="col-6">
+                  <span class="amenity--item">Pillows</span>
+                </div>
+                <div class="col-6 d-flex flex-row">
+                  <div
+                    class="btn-group col-6"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="fnExtras('bedroom', 'pillows', 'decrease')"
+                    >
+                      -
+                    </button>
+                    <button type="button" class="btn btn-light">
+                      {{ extras.bedroom.pillows }}
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="fnExtras('bedroom', 'pillows', 'increase')"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div
+                    class="btn-group col-6"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      :class="checkChange('bedroom','pillows', 'yes')"
+                      @click="fnChange('bedroom','pillows', 'yes')"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      type="button"
+                      :class="checkChange('bedroom','pillows', 'no')"
+                      @click="fnChange('bedroom','pillows', 'no')"
+                    >
+                      No
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="amenity d-flex flex-row justify-content-between align-items-center"
+              >
+                <div class="col-6">
+                  <span class="amenity--item">Extra Bed</span>
+                </div>
+                <div class="col-6 d-flex flex-row">
+                  <div
+                    class="btn-group col-6"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="fnExtras('bedroom', 'extraBed', 'decrease')"
+                    >
+                      -
+                    </button>
+                    <button type="button" class="btn btn-light">
+                      {{ extras.bedroom.extraBed }}
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="fnExtras('bedroom', 'extraBed', 'increase')"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div
+                    class="btn-group col-6"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      :class="checkChange('bedroom','extraBed', 'yes')"
+                      @click="fnChange('bedroom','extraBed', 'yes')"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      type="button"
+                      :class="checkChange('bedroom','extraBed', 'no')"
+                      @click="fnChange('bedroom','extraBed', 'no')"
+                    >
+                      No
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-20">
+            <div class="category d-flex flex-row justify-content-between">
+              <div class="col-6">
+                <span class="category--title">Bathroom</span>
+              </div>
+              <div class="col-6 d-flex flex-row justify-content-between">
+                <span class="col-6 text-center category__label--300"
+                  >Extras</span
+                >
+                <span class="col-6 text-center category__label--300"
+                  >Change?</span
+                >
+              </div>
+            </div>
+            <div>
+              <div
+                class="amenity d-flex flex-row justify-content-between align-items-center"
+              >
+                <div class="col-6">
+                  <span class="amenity--item">Shampoo</span>
+                </div>
+                <div class="col-6 d-flex flex-row">
+                  <div
+                    class="btn-group col-6"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="fnExtras('bathroom', 'shampoo', 'decrease')"
+                    >
+                      -
+                    </button>
+                    <button type="button" class="btn btn-light">
+                      {{ extras.bathroom.shampoo }}
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="fnExtras('bathroom', 'shampoo', 'increase')"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div
+                    class="btn-group col-6"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      :class="checkChange('bathroom','shampoo', 'yes')"
+                      @click="fnChange('bathroom','shampoo', 'yes')"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      type="button"
+                      :class="checkChange('bathroom','shampoo', 'no')"
+                      @click="fnChange('bathroom','shampoo', 'no')"
+                    >
+                      No
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="amenity d-flex flex-row justify-content-between align-items-center"
+              >
+                <div class="col-6">
+                  <span class="amenity--item">Body Wash</span>
+                </div>
+                <div class="col-6 d-flex flex-row">
+                  <div
+                    class="btn-group col-6"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="fnExtras('bathroom', 'bodyWash', 'decrease')"
+                    >
+                      -
+                    </button>
+                    <button type="button" class="btn btn-light">
+                      {{ extras.bathroom.bodyWash }}
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="fnExtras('bathroom', 'bodyWash', 'increase')"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div
+                    class="btn-group col-6"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      :class="checkChange('bathroom','bodyWash', 'yes')"
+                      @click="fnChange('bathroom','bodyWash', 'yes')"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      type="button"
+                      :class="checkChange('bathroom','bodyWash', 'no')"
+                      @click="fnChange('bathroom','bodyWash', 'no')"
+                    >
+                      No
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="amenity d-flex flex-row justify-content-between align-items-center"
+              >
+                <div class="col-6">
+                  <span class="amenity--item">Towels</span>
+                </div>
+                <div class="col-6 d-flex flex-row">
+                  <div
+                    class="btn-group col-6"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="fnExtras('bathroom', 'towels', 'decrease')"
+                    >
+                      -
+                    </button>
+                    <button type="button" class="btn btn-light">
+                      {{ extras.bathroom.towels }}
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="fnExtras('bathroom', 'towels', 'increase')"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div
+                    class="btn-group col-6"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      :class="checkChange('bathroom','towels', 'yes')"
+                      @click="fnChange('bathroom','towels', 'yes')"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      type="button"
+                      :class="checkChange('bathroom','towels', 'no')"
+                      @click="fnChange('bathroom','towels', 'no')"
+                    >
+                      No
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="amenity d-flex flex-row justify-content-between align-items-center"
+              >
+                <div class="col-6">
+                  <span class="amenity--item">Hand Towels</span>
+                </div>
+                <div class="col-6 d-flex flex-row">
+                  <div
+                    class="btn-group col-6"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="fnExtras('bathroom', 'handTowels', 'decrease')"
+                    >
+                      -
+                    </button>
+                    <button type="button" class="btn btn-light">
+                      {{ extras.bathroom.handTowels }}
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      @click="fnExtras('bathroom', 'handTowels', 'increase')"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div
+                    class="btn-group col-6"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      :class="checkChange('bathroom','handTowels', 'yes')"
+                      @click="fnChange('bathroom','handTowels', 'yes')"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      type="button"
+                      :class="checkChange('bathroom','handTowels', 'no')"
+                      @click="fnChange('bathroom','handTowels', 'no')"
+                    >
+                      No
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex flex-column align-items-center">
+          <button
+            type="button"
+            class="btn btn-primary width-100"
+            @click="save('clean')"
+          >
+            Clean My Room
+          </button>
+          <span>or</span>
+          <button
+            type="button"
+            class="btn btn-success width-100"
+            @click="save('request')"
+          >
+            Submit Request
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.21/vue.min.js"></script>
+    <script>
+      var app = new Vue({
+        el: "#app",
+        created: function() {
+          function generateRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min) + min);
+          }
+          this.room = generateRandomNumber(100, 300);
+        },
+        data: {
+          success: false,
+          room: 0,
+          extras: {
+            bedroom: {
+              sheets: 1,
+              pillows: 1,
+              extraBed: 1
+            },
+            bathroom: {
+              shampoo: 1,
+              bodyWash: 1,
+              towels: 1,
+              handTowels: 1
+            }
+          },
+          change: {
+            bedroom: {
+              sheets: "yes",
+              pillows: "yes",
+              extraBed: "yes"
+            },
+            bathroom: {
+              shampoo: "yes",
+              bodyWash: "yes",
+              towels: "yes",
+              handTowels: "yes"
+            }
+          }
+        },
+        methods: {
+          save: function(type) {
+            let payload = {
+              extras: this.extras,
+              change: this.change,
+              status: "assigned",
+              room: this.room,
+              type: type
+            };
+            let self = this
+            axios.post("/task", payload).then(res => {
+              self.success = true
+              setTimeout(()=>{
+                self.success = false
+              }, 5000)
+            });
+          },
+          fnExtras: function(category, item, direction) {
+            console.log("hi");
+            let data = this.extras[category][item];
+            if (direction === "increase") {
+              this.extras[category][item]++;
+            } else if (direction === "decrease" && data !== 0) {
+              this.extras[category][item]--;
+            }
+          },
+          fnChange: function(category, item, input) {
+            if (input === "yes") {
+              this.change[category][item] = "yes";
+            } else if (input === "no") {
+              this.change[category][item] = "no";
+            }
+          },
+          checkChange: function(category, item, type) {
+            let check = this.change[category][item];
+            if (check === "yes" && type === "yes") {
+              return "btn btn-success";
+            } else if (check === "no" && type === "no") {
+              return "btn btn-danger";
+            }
+
+            return "btn btn-secondary";
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,75 @@
+/* General */
+.p {
+  padding: 5px;
+}
+.mb-20 {
+  margin-bottom: 20px;
+}
+.width-100 {
+  width: 100%;
+}
+
+/* App */
+#app {
+  height: 100vh;
+  padding: 20px;
+  background: #fafafa;
+  font-family: Helvetica;
+}
+.main {
+  background: #fff;
+  width: 100%;
+  max-width: 800px;
+  border: 1px solid #c1c1c1;
+  border-radius: 5px;
+  padding: 15px;
+  flex: 1;
+  overflow-y: scroll;
+}
+.role {
+  width: 100%;
+}
+.role p {
+  background: #54c0ff;
+  display: inline;
+  padding: 5px;
+  color: #fff;
+  border-radius: 5px;
+  font-weight: 300;
+}
+
+.amenity {
+  margin-bottom: 5px;
+}
+.amenity--item {
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.tasks {
+  margin-bottom: 5px;
+}
+.tasks--item {
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.category__header {
+  font-weight: 300;
+}
+.category--title {
+  font-size: 20px;
+  font-weight: 600;
+}
+.category--label {
+  /* font-weight: 300; */
+  font-weight: 16px;
+}
+.category__label--300 {
+  font-weight: 300;
+  font-weight: 16px;
+}
+
+.welcome {
+  margin-bottom: 20px;
+}

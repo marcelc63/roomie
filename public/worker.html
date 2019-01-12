@@ -1,0 +1,230 @@
+<html>
+  <head>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  </head>
+
+  <body>
+    <div id="app" class="d-flex flex-column align-items-center">
+      <div class="role">
+        <h5>
+          <span class="badge badge-light"
+            ><a href="/">Customer Dashboard</a></span
+          >
+          <span class="badge badge-primary">Worker Dashboard</span>
+          <span class="badge badge-light"
+            ><a href="/admin.html">Admin Dashboard</a></span
+          >
+        </h5>
+      </div>
+      <div class="main d-flex flex-column">
+        <div>
+          <div class="welcome">
+            Hi <b>Gideon</b>, these are your tasks for today :)
+          </div>
+
+          <div class="mb-20">
+            <div class="category d-flex flex-row justify-content-between">
+              <div class="col-12">
+                <span class="category--title">Assigned</span>
+              </div>
+            </div>
+            <div class="category d-flex flex-row justify-content-between">
+              <div
+                class="col-4 d-flex flex-row justify-content-between no-gutters"
+              >
+                <span class="col-6 text-left category__label">Room</span>
+                <span class="col-6 text-left category__label">Time</span>
+              </div>
+              <div class="col-8">
+                <span class="text-center category__label">Item</span>
+              </div>
+            </div>
+            <div
+              v-for="(task, taskIn) in assignedTasks"
+              :key="taskIn"
+              class="tasks d-flex flex-row justify-content-between align-items-center"
+            >
+              <div
+                class="col-4 d-flex flex-row justify-content-between no-gutters"
+              >
+                <span class="col-6 tasks--item">{{ task.room }}</span>
+                <span class="col-6 tasks--item">{{
+                  convertTime(task.timestamp)
+                }}</span>
+              </div>
+              <div class="col-8 d-flex flex-row">
+                <div v-if="task.type === 'clean'">
+                  <span class="badge badge-secondary mr-1 mb-1"
+                    >Clean Room</span
+                  >
+                </div>
+                <div v-if="task.type === 'request'">
+                  <span
+                    class="badge badge-secondary mr-1 mb-1"
+                    v-for="(item, itemIn) in getItems('assigned', taskIn)"
+                    :key="itemIn"
+                    v-if="item.change === 'yes'"
+                    >{{ item.item }} - {{ item.amnt }}</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-20">
+            <div class="category d-flex flex-row justify-content-between">
+              <div class="col-12">
+                <span class="category--title">Completed</span>
+              </div>
+            </div>
+            <div class="category d-flex flex-row justify-content-between">
+              <div
+                class="col-4 d-flex flex-row justify-content-between no-gutters"
+              >
+                <span class="col-6 text-left category__label">Room</span>
+                <span class="col-6 text-left category__label">Time</span>
+              </div>
+              <div class="col-8">
+                <span class="text-center category__label">Item</span>
+              </div>
+            </div>
+            <div
+              v-for="(task, taskIn) in completedTasks"
+              :key="taskIn"
+              class="tasks d-flex flex-row justify-content-between align-items-center"
+            >
+              <div
+                class="col-4 d-flex flex-row justify-content-between no-gutters"
+              >
+                <span class="col-6 tasks--item">{{ task.room }}</span>
+                <span class="col-6 tasks--item">{{
+                  convertTime(task.timestamp)
+                }}</span>
+              </div>
+              <div class="col-8 d-flex flex-row">
+                <div v-if="task.type === 'clean'">
+                  <span class="badge badge-secondary mr-1 mb-1"
+                    >Clean Room</span
+                  >
+                </div>
+                <div v-if="task.type === 'request'">
+                  <span
+                    class="badge badge-secondary mr-1 mb-1"
+                    v-for="(item, itemIn) in getItems('assigned', taskIn)"
+                    :key="itemIn"
+                    v-if="item.change === 'yes'"
+                    >{{ item.item }} - {{ item.amnt }}</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.21/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js"></script>
+    <script>
+      var app = new Vue({
+        el: "#app",
+        created: function() {
+          this.getTasks();
+        },
+        data: {
+          tasks: []
+        },
+        computed: {
+          assignedTasks: function() {
+            return this.tasks.filter(x => x.status === "assigned").reverse();
+          },
+          completedTasks: function() {
+            return this.tasks.filter(x => x.status === "completed").reverse();
+          }
+        },
+        methods: {
+          getItems: function(category, index) {
+            let data;
+            if ("assigned") {
+              data = this.assignedTasks;
+            } else {
+              data = this.completedTasks;
+            }
+
+            if (data.length === 0) {
+              return [];
+            }
+
+            data = data[index];
+            let bedroom = data.extras.bedroom;
+            let changeBedroom = data.change.bedroom;
+            let bathroom = data.extras.bathroom;
+            let changeBathroom = data.change.bathroom;
+
+            return [
+              {
+                item: "Sheets",
+                category: "bedroom",
+                amnt: bedroom.sheets,
+                change: changeBedroom.sheets
+              },
+              {
+                item: "Pillows",
+                category: "bedroom",
+                amnt: bedroom.pillows,
+                change: changeBedroom.pillows
+              },
+              {
+                item: "Extra Bed",
+                category: "bedroom",
+                amnt: bedroom.extraBed,
+                change: changeBedroom.extraBed
+              },
+              {
+                item: "Shampoo",
+                category: "bathroom",
+                amnt: bathroom.shampoo,
+                change: changeBathroom.shampoo
+              },
+              {
+                item: "bodyWash",
+                category: "bathroom",
+                amnt: bathroom.bodyWash,
+                change: changeBathroom.bodyWash
+              },
+              {
+                item: "Towels",
+                category: "bathroom",
+                amnt: bathroom.towels,
+                change: changeBathroom.towels
+              },
+              {
+                item: "Hand Towels",
+                category: "bathroom",
+                amnt: bathroom.handTowels,
+                change: changeBathroom.handTowels
+              }
+            ];
+          },
+          convertTime: function(timestring) {
+            let time = moment(timestring);
+            return time.format("H:mm");
+          },
+          getTasks: function() {
+            let self = this;
+            axios.get("/task/all").then(res => {
+              let data = res.data;
+              self.tasks = data;
+            });
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

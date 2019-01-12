@@ -1,0 +1,190 @@
+<html>
+  <head>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  </head>
+
+  <body>
+    <div id="app" class="d-flex flex-column align-items-center">
+      <div class="role">
+        <h5>
+          <span class="badge badge-light"
+            ><a href="/">Customer Dashboard</a></span
+          >
+          <span class="badge badge-light"
+            ><a href="/worker.html">Worker Dashboard</a></span
+          >
+          <span class="badge badge-primary">Admin Dashboard</span>
+        </h5>
+      </div>
+      <div class="main d-flex flex-column">
+        <div>
+          <div class="welcome">
+            Hi <b>Gideon</b>, these are what's happening today :)
+          </div>
+
+          <div class="mb-20">
+            <div class="category d-flex flex-row justify-content-between">
+              <div class="col-12">
+                <span class="category--title">Open Requests</span>
+              </div>
+            </div>
+            <div
+              class="category__header d-flex flex-row justify-content-between"
+            >
+              <div
+                class="col-4 d-flex flex-row justify-content-between no-gutters"
+              >
+                <span class="col-6 text-left category__label">Room</span>
+                <span class="col-6 text-left category__label">Time</span>
+              </div>
+              <div
+                class="col-8 d-flex flex-row justify-content-between no-gutters"
+              >
+                <span class="col-4 text-left category__label">Request</span>
+                <span class="col-4 text-left category__label">Status</span>
+                <span class="col-4 text-left category__label">Completed?</span>
+              </div>
+            </div>
+            <div
+              v-for="(task, taskIn) in tasks"
+              :key="taskIn"
+              class="tasks d-flex flex-row justify-content-between align-items-center"
+            >
+              <div
+                class="col-4 d-flex flex-row justify-content-between no-gutters align-items-center"
+              >
+                <span class="col-6 text-left tasks--item">{{ task.room }}</span>
+                <span class="col-6 text-left tasks--item">{{
+                  convertTime(task.timestamp)
+                }}</span>
+              </div>
+              <div
+                class="col-8 d-flex flex-row justify-content-between no-gutters align-items-center"
+              >
+                <span class="col-4 text-left tasks--item"
+                  ><span
+                    class="badge badge-secondary mr-1"
+                    v-if="task.type === 'clean'"
+                    >Clean Room</span
+                  ><span
+                    class="badge badge-secondary mr-1"
+                    v-if="task.type === 'request'"
+                    >Request Ammenities</span
+                  ></span
+                >
+
+                <span class="col-4 text-left tasks--item">{{
+                  ucfirst(task.status)
+                }}</span>
+                <div
+                  class="btn-group col-4"
+                  role="group"
+                  aria-label="Basic example"
+                >
+                  <button
+                    type="button"
+                    class="btn-sm btn-secondary"
+                    v-if="task.status === 'assigned'"
+                    @click="completeTask(taskIn)"
+                  >
+                    Complete Task
+                  </button>
+                  <span class="tasks--item" v-if="task.status === 'completed'"
+                    >Task Complete</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-20">
+              <div class="category d-flex flex-row justify-content-between">
+                <div class="col-12">
+                  <span class="category--title">Soon to Check Out</span>
+                </div>
+              </div>
+              <div
+                class="category__header d-flex flex-row justify-content-between"
+              >
+                <div
+                  class="col-12 d-flex flex-row justify-content-between no-gutters"
+                >
+                  <span class="col-4 text-left category__label">Room</span>
+                  <span class="col-4 text-left category__label"
+                    >Time to Checkout</span
+                  >
+                  <span class="col-4 text-left category__label">Late</span>
+                </div>
+              </div>
+              <div>
+                <div
+                  class="tasks d-flex flex-row justify-content-between align-items-center"
+                >
+                  <div
+                    class="col-12 d-flex flex-row justify-content-between no-gutters"
+                  >
+                    <span class="col-4 tasks--item">223</span>
+                    <span class="col-4 tasks--item">0:00</span>
+                    <span class="col-4 tasks--item"
+                      ><span class="badge badge-secondary mr-1">Yes</span></span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.21/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js"></script>
+    <script>
+      var app = new Vue({
+        el: "#app",
+        created: function() {
+          this.getTasks();
+        },
+        data: {
+          tasks: []
+        },
+        computed: {
+          assignedTasks: function() {
+            return this.tasks.filter(x => x.status === "assigned").reverse();
+          },
+          completedTasks: function() {
+            return this.tasks.filter(x => x.status === "completed").reverse();
+          }
+        },
+        methods: {
+          completeTask: function(index) {
+            let self = this;
+            let task = this.tasks[index];
+            axios.post("/task/complete", { _id: task._id }).then(res => {
+              self.getTasks();
+            });
+          },
+          ucfirst: function(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+          },
+          convertTime: function(timestring) {
+            let time = moment(timestring);
+            return time.format("H:mm");
+          },
+          getTasks: function() {
+            let self = this;
+            axios.get("/task/all").then(res => {
+              let data = res.data;
+              self.tasks = data.reverse();
+            });
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
