@@ -501,12 +501,12 @@
               room: this.room,
               type: type
             };
-            let self = this
+            let self = this;
             axios.post("/task", payload).then(res => {
-              self.success = true
-              setTimeout(()=>{
-                self.success = false
-              }, 5000)
+              self.success = true;
+              setTimeout(() => {
+                self.success = false;
+              }, 5000);
             });
           },
           fnExtras: function(category, item, direction) {
