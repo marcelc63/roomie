@@ -13,13 +13,11 @@ var mongoose = require("mongoose");
 var credentials = require("./config.js");
 mongoose.Promise = require("bluebird");
 mongoose
-  .connect(
-    credentials.mongoConnection,
-    {
-      promiseLibrary: require("bluebird"),
-      useNewUrlParser: true
-    }
-  )
+  .connect(credentials.mongoConnection, {
+    promiseLibrary: require("bluebird"),
+    useNewUrlParser: true,
+    auth: { authdb: "admin" }
+  })
   .then(() => console.log("connection succesful"))
   .catch(err => console.error(err));
 
