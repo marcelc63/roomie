@@ -3,9 +3,18 @@ const app = express();
 const http = require("http").Server(app);
 const port = 3001;
 var bodyParser = require("body-parser");
+
 var path = require("path");
 
-app.use(bodyParser.urlencoded());
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(__dirname + "/public"));
 
@@ -20,6 +29,7 @@ mongoose
   })
   .then(() => console.log("connection succesful"))
   .catch(err => console.error(err));
+mongoose.set("useCreateIndex", true);
 
 require("./app/api.js")(app);
 
@@ -36,5 +46,5 @@ app.get("/admin", function(req, res) {
 });
 
 http.listen(port, function() {
-  console.log("listening on *:3001");
+  console.log("listening on *:"+port);
 });
